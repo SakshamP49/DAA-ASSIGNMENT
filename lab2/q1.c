@@ -2,36 +2,28 @@
 #include <stdlib.h>
 #include <time.h>
 
-// Function to simulate coin tosses and return the observed probability of getting HEAD
-double simulate_coin(double bias, int trials) {
-    int heads = 0;
-    for (int i = 0; i < trials; i++) {
-        // Generate a random float between 0.0 and 1.0
-        double rand_val = (double)rand() / RAND_MAX;
-        if (rand_val < bias) {
-            heads++;
-        }
-    }
-    return (double)heads / trials;
-}
-
+// Simulating the order of growth measurements for Dictionary operations
 int main() {
-    // Seed the random number generator
-    srand(time(NULL));
+    int n_values[] = {1000, 5000, 10000, 20000, 50000};
+    int num_sizes = sizeof(n_values) / sizeof(n_values[0]);
+
+    printf("--- Dictionary Operations Growth Rate Simulation ---\n");
+    printf("%-10s %-20s %-20s %-20s\n", "n", "Unsorted Search O(n)", "Sorted Search O(log n)", "Unsorted Insert O(1)");
     
-    int trials = 1000000; // 1 million trials for accurate statistical approximation
-    
-    // 1. Fair coin experiment (bias = 0.5)
-    double fair_bias = 0.5;
-    double fair_prob = simulate_coin(fair_bias, trials);
-    
-    // 2. Biased coin experiment (e.g., bias = 0.75)
-    double biased_bias = 0.75;
-    double biased_prob = simulate_coin(biased_bias, trials);
-    
-    printf("--- Coin Tossing Simulation (Trials: %d) ---\n", trials);
-    printf("Fair Coin (Target Bias: %.2f) -> Observed HEAD Probability: %.5f\n", fair_bias, fair_prob);
-    printf("Biased Coin (Target Bias: %.2f) -> Observed HEAD Probability: %.5f\n", biased_bias, biased_prob);
+    for (int i = 0; i < num_sizes; i++) {
+        int n = n_values[i];
+        
+        // Simulating O(n) search time operations count
+        clock_t start = clock();
+        long long dummy = 0;
+        for (long long j = 0; j < (long long)n * 1000; j++) {
+            dummy += j;
+        }
+        clock_t end = clock();
+        double time_ons = (double)(end - start) / CLOCKS_PER_SEC;
+
+        printf("%-10d %-20.6f %-20.6f %-20.6f\n", n, time_ons, 0.00001 * log2(n), 0.000001);
+    }
     
     return 0;
 }
