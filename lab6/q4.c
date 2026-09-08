@@ -58,7 +58,7 @@ void sortViaReversal(int arr[], int left, int right) {
     }
 }
 
-int main() {
+int main() { 
     int p[] = {1, 4, 3, 2, 5};
     int n = sizeof(p)/sizeof(p[0]);
     
